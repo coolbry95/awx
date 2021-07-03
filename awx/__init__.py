@@ -152,9 +152,12 @@ def manage():
 
     # enforce the postgres version is equal to 12. if not, then terminate program with exit code of 1
     if not MODE == 'development':
-        if (connection.pg_version // 10000) < 12:
-            sys.stderr.write("Postgres version 12 is required\n")
-            sys.exit(1)
+        try:
+            if (connection.pg_version // 10000) < 12:
+                sys.stderr.write("Postgres version 12 is required\n")
+        except:
+            sys.stderr.write("Postgres version 12 is required... going to try to continue anyway\n")
+
 
     if len(sys.argv) >= 2 and sys.argv[1] in ('version', '--version'):  # pragma: no cover
         sys.stdout.write('%s\n' % __version__)
